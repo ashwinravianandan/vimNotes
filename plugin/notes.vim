@@ -15,6 +15,9 @@ call s:set('g:HtmlDir', $HOME .'/Documents/html-notes')
 
 function! FindInNote( )
    let l:SearchPattern = input( "Search String: " )
+   if empty( l:SearchPattern )
+      return 1
+   endif
   execute "vimgrep /" . l:SearchPattern . "/j" . g:NotesDir . "/**/*.md"
   copen
 endfunction
@@ -22,6 +25,9 @@ endfunction
 
 function! FindNote( )
    let l:SearchPattern = input( "Search String: " )
+   if empty( l:SearchPattern )
+      return 1
+   endif
    let l:FindCommand = "find \"" . g:NotesDir . "\" -type f | grep -i \"" . l:SearchPattern . "\""
    let l:Mylist = systemlist( l:FindCommand )
 	let fileList = []
@@ -39,6 +45,11 @@ endfunction
 
 function! NewNoteWithPath()
    let l:NoteFile = input( "Open: ", g:NotesDir . "/", "file" )
+   let l:NoteName = substitute( l:NoteFile, g:NotesDir . '\/', "",  'g' )
+   let l:NoteName = substitute( l:NoteName, '\ *', "", 'g' )
+   if  empty( l:NoteName )
+      return 1
+   endif
    let l:NoteRoot = substitute( l:NoteFile, '\(.*\)\/.*', '\1', 'g' )
    let l:NoteFile = substitute( l:NoteFile, '\ ','\\\ ', 'g') 
    if !isdirectory( l:NoteRoot )
