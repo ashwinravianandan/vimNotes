@@ -23,7 +23,8 @@ endfunction
 function! FindNote( )
    let l:SearchPattern = input( "Search String: " )
    set errorformat+=%f
-  execute "cexpr system(\'find " . g:NotesDir . " -type f \\| grep -i \"". l:SearchPattern . "\"\')" 
+   let l:FindCommand = "find \"" . g:NotesDir . "\" -type f | grep -i \"" . l:SearchPattern . "\""
+   cexpr system( l:FindCommand )
    set errorformat-=%f
 endfunction
 
