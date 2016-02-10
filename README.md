@@ -47,7 +47,7 @@ notes as well.  Notes creation handles below cases.
       * CTRL-D can be used to view alternatives since vim supports this natively for filename completion.
    * File names need not have an extension.  The plug-in takes care of appending .md to the file while saving it.
 
-### Looking for an expression in notes
+### Finding an expression in notes
 When _<Leader>sn_ in input, you would be asked to key in a search string. The
 search string is directly passed to vimgrep, so any valid vimgrep expression is
 supported.  The search results are populated in the quick fix window.
@@ -59,9 +59,9 @@ results are again populated in the quick-fix list and vim would just to the
 first occurrence in the list. _Search is performed using grep and not vimgrep in
 this case_.
 
-## Limitations and future items
+## Limitations and action items
 The plug-in has be below limitations at the moment
    * The find and grep commands are used to find notes at the moment.  So this feature might not work in windows. 
    * The file extension can only be _.md_.  This needs to be made configurable.
-   * Makedown to HTML support needs to be incorporated.
+   * Markdown to HTML support needs to be incorporated.
 
