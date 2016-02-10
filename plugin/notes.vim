@@ -22,10 +22,18 @@ endfunction
 
 function! FindNote( )
    let l:SearchPattern = input( "Search String: " )
-   set errorformat+=%f
    let l:FindCommand = "find \"" . g:NotesDir . "\" -type f | grep -i \"" . l:SearchPattern . "\""
-   cexpr system( l:FindCommand )
-   set errorformat-=%f
+   let l:Mylist = systemlist( l:FindCommand )
+	let fileList = []
+   for item in l:Mylist
+      "get file name
+      let Dict = {}
+      let Dict['filename'] = item
+      let Dict['lnum'] = 1
+      call add( fileList , Dict )
+   endfor
+   call setqflist( fileList, 'r' )
+   copen
 endfunction
 
 
