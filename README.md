@@ -9,6 +9,7 @@ viewed as projects or notebooks or just logical compartments for notes.
 
 ## Feature Overview
 The below features are currently implemented
+
    * Binding to recursively look for an expression in the notes database irrespective of the current working directory in vim.
    * Mechanism to find a note in the notes database.
    * Mapping to created a new note at the root folder of the notes database or in any subfolder without having to bother about folder management.
@@ -31,8 +32,8 @@ notes and the top folder for HTML exports respectively.  Both variables have the
 It is also useful to have the below default mappings
 
     nmap <Leader>nn :call NewNoteWithPath()<CR> 
-    nmap <Leader>fn :call FindNote()<CR>
-    nmap <Leader>sn :call FindInNote()<CR>
+    nmap <Leader>nf :call FindNote()<CR>
+    nmap <Leader>ns :call FindInNote()<CR>
 
 ## Features in detail
 
@@ -41,6 +42,7 @@ _<Leader>nn_ would prompt the user to enter the file name for the new note. The
 vim command line is pre-filled with the base path of the notes database and
 supports filename completion. So this mechanism can be used to open existing
 notes as well.  Notes creation handles below cases.
+
    * If a series of sub-directories are specified in the path to the new note, these directories would be created.
       * This enables new projects (or just folders based on your approach to note taking) to be defined on the go.
       * File name auto completion helps you select a project/sub-project.
@@ -61,6 +63,7 @@ this case_.
 
 ## Limitations and action items
 The plug-in has be below limitations at the moment
+
    * The find and grep commands are used to find notes at the moment.  So this feature might not work in windows. 
    * The file extension can only be _.md_.  This needs to be made configurable.
    * Markdown to HTML support needs to be incorporated.
