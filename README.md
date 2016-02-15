@@ -26,8 +26,9 @@ Two variables g:NotesDir and g:HtmlDir need to be defined in the vimrc. They
 should point to the root directory of the folder in which you wish to maintain
 notes and the top folder for HTML exports respectively.  Both variables have the below defaults.
 
-    let g:NotesDir =  '~/Documents/notes'
-    let g:HtmlDir = '~/Documents/html-notes'
+    let g:NotesDir   = '~/Documents/notes'
+    let g:HtmlDir    = '~/Documents/html-notes'
+    let g:NoteSuffix = '.md'
 
 It is also useful to have the below default mappings
 

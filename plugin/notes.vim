@@ -12,6 +12,7 @@ endfunction
 
 call s:set('g:NotesDir', $HOME .'/Documents/notes')
 call s:set('g:HtmlDir', $HOME .'/Documents/html-notes')
+call s:set('g:NoteSuffix', '.md' )
 
 function! FindInNote( )
    let l:SearchPattern = input( "Search String: " )
@@ -58,8 +59,8 @@ function! NewNoteWithPath()
    if !isdirectory( l:NoteRoot )
       call mkdir( l:NoteRoot,'p')
    endif
-   if l:NoteFile !~ '\.md$'
-      execute "edit " . l:NoteFile . "\.md"
+   if l:NoteFile !~ g:NoteSuffix
+      execute "edit " . l:NoteFile . g:NoteSuffix
    else
       execute "edit " . l:NoteFile
    endif
