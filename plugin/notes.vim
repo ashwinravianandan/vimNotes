@@ -18,7 +18,7 @@ function! FindInNote( )
    if empty( l:SearchPattern )
       return 1
    endif
-  execute "vimgrep /" . l:SearchPattern . "/j" . g:NotesDir . "/**/*.md"
+   execute "grep -R " . l:SearchPattern . " " . g:NotesDir
   copen
 endfunction
 
@@ -39,7 +39,10 @@ function! FindNote( )
       call add( fileList , Dict )
    endfor
    call setqflist( fileList, 'r' )
-   copen
+   if !empty( fileList )
+      1cc
+      copen
+   endif
 endfunction
 
 
