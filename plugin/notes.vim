@@ -19,6 +19,7 @@ function! FindInNote( )
    if empty( l:SearchPattern )
       return 1
    endif
+   let l:SearchPattern = "\"" .  l:SearchPattern . "\""
    execute "grep -R " . l:SearchPattern . " " . g:NotesDir
   copen
 endfunction
