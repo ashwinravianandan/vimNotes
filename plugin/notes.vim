@@ -67,6 +67,13 @@ function! NewNoteWithPath()
    endif
 endfunction
 
+function! DeleteNote()
+   let l:FilePath = expand("%")
+   bd!
+   execute "!rm \"" . l:FilePath . "\""
+endfunction
+
+
 function! PythonMarkDownToHtml()
    let l:Output = g:HtmlDir . "/" . expand("%:p:t:r") . ".html"
    let l:Stylesheet = g:HtmlDir . "/vimNotesStyleSheet.css"
@@ -74,3 +81,4 @@ function! PythonMarkDownToHtml()
 endfunction
 
 command! NewNote call NewNoteWithPath()
+command! DeleteNote call DeleteNote()
