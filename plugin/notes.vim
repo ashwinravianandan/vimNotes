@@ -30,7 +30,7 @@ function! FindNote( )
    if empty( l:SearchPattern )
       return 1
    endif
-   let l:FindCommand = "find \"" . g:NotesDir . "\" -type f | grep -i \"" . l:SearchPattern . "\""
+   let l:FindCommand = "find -L \"" . g:NotesDir . "\" -type f | grep -i \"" . l:SearchPattern . "\""
    let l:Mylist = systemlist( l:FindCommand )
 	let fileList = []
    for item in l:Mylist
