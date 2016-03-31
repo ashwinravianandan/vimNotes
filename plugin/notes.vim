@@ -21,7 +21,11 @@ function! FindInNote( )
    endif
    let l:SearchPattern = "\"" .  l:SearchPattern . "\""
    execute "grep -R " . l:SearchPattern . " " . g:NotesDir
-  copen
+   let l:FileList = getqflist()
+   if !empty( l:FileList )
+      copen
+      1cc
+   endif
 endfunction
 
 
@@ -42,8 +46,8 @@ function! FindNote( )
    endfor
    call setqflist( fileList, 'r' )
    if !empty( fileList )
-      1cc
       copen
+      1cc
    endif
 endfunction
 
