@@ -89,15 +89,36 @@ function! NoteRoot( )
    return l:NoteRoot
 endfunction
 
+function! FindAndCopyFile( fileName, dest )
+   let l:NoteRoot = NoteRoot()
+   let l:FileDest = l:NoteRoot . '/' . a:dest
+   silent! let l:MimeTypes = systemlist( 'xclip -selection clip -t TARGETS -o' )
+   let l:Path = ''
+   for item in l:MimeTypes
+      if item =~ 'uri-list'
+         silent! let l:Path = system('xclip -selection clip -t text/uri-list -o')
+         break
+      endif
+   endfor
+   let l:Extn = substitute( l:Path, '..*\.\(.*\)\r.*', '\1', 'g')
+   let l:Path = substitute( l:Path, 'file:\/\/\(.*\)\r.*', '\1', 'g')
+   silent! call system('xclip -i ' . l:Path)
+   if !isdirectory( fnameescape(l:FileDest) )
+      call mkdir( fnameescape(l:FileDest), 'p' )
+   endif
+   let l:fullPath = shellescape(l:FileDest . '/' . a:fileName . '.' . l:Extn )
+   silent! call system( 'xclip -o >' . l:fullPath )
+   return l:Extn
+endfunction
+
 function! AddImage( fileName )
    let l:NoteRoot = NoteRoot()
-   echom l:NoteRoot
    let l:ImageDest = l:NoteRoot . '/images'
    if !isdirectory( fnameescape(l:ImageDest) )
       call mkdir( fnameescape(l:ImageDest), 'p' )
    endif
    let l:fullPath = l:ImageDest . '/' . a:fileName
-   let l:MimeTypes = systemlist( 'xclip -selection clip -t TARGETS -o' )
+   silent! let l:MimeTypes = systemlist( 'xclip -selection clip -t TARGETS -o' )
    let l:Mime = ''
    for item in l:MimeTypes
       if item =~ 'image'
@@ -107,42 +128,31 @@ function! AddImage( fileName )
    endfor
    let l:Extn = ''
    if l:Mime =~ 'png'
-      let l:Extn = '.png'
+      let l:Extn = 'png'
    elseif l:Mime =~ 'jpeg'
-      let l:Extn = '.jpg'
+      let l:Extn = 'jpg'
    endif
-   let l:Expr = '!xclip -selection clip -t ' . l:Mime. ' -o > ' . shellescape(l:fullPath . l:Extn)
-   execute l:Expr
+   if '' != l:Extn
+      let l:Expr = 'xclip -selection clip -t ' . l:Mime. ' -o > ' . l:fullPath . '.' . l:Extn
+      silent! call system( l:Expr )
+   else
+      let l:Extn = FindAndCopyFile( a:fileName, 'images' )
+   endif
    if 0 == v:shell_error
-      let l:Link = "![](./images/" . a:fileName . l:Extn . ")"
+      let l:Link = "![](./images/" . a:fileName . '.' . l:Extn . ")"
       put =l:Link
    endif
 endfunction
 
-function! AddFile( fileName )
-   let l:NoteRoot = NoteRoot()
-   let l:FileDest = l:NoteRoot . '/files'
-   let l:FileDest = substitute( l:FileDest, '\ ', '\\\ ', 'g' )
-   let l:MimeTypes = systemlist( 'xclip -selection clip -t TARGETS -o' )
-   let l:Mime = ''
-   for item in l:MimeTypes
-      echom item
-      if item =~ 'image'
-         let l:Mime = item
-         break
-      endif
-   endfor
-   let l:Extn = ''
-   if !isdirectory( l:FileDest )
-      call mkdir( l:FileDest, 'p' )
+function! AddFile()
+   let l:text = input( "Link Text: " )
+   let l:fileName = input( "Save as[no extn]: " )
+   let l:Extn = FindAndCopyFile( l:fileName, 'files' )
+   if 0 == v:shell_error
+      let l:Link = "[" . l:text . "](./files/" . l:fileName . '.' . l:Extn . ")"
+      put =l:Link
+      normal kJ$
    endif
-   "let l:fullPath = shellescape(l:FileDest . '/' . a:fileName)
-   "execute '!xclip -o >' . l:fullPath
-   "if 0 == v:shell_error
-   "   let l:Link = "[](./files/" . a:fileName . ")"
-   "   put =l:Link
-   "   normal kJ
-   "endif
 endfunction
 
 function! MarkDownToHtml()
@@ -150,10 +160,11 @@ function! MarkDownToHtml()
    let l:Output = l:Output . "/" . expand("%:p:t:r") . ".html"
    let l:Stylesheet = g:HtmlDir . "/vimNotesStyleSheet.css"
    "execute "!python ~/markdownCSS_py.py \"" . expand("%:p") . "\" \"" . l:Stylesheet . "\""  . " \"".  l:Output . "\""
-   execute "!pandoc -f markdown -t html  --standalone \"" . expand("%:p") . "\" -o \"" . l:Output . "\""
+   let l:command = "pandoc -f markdown -t html  --standalone \"" . expand("%:p") . "\" -o \"" . l:Output . "\""
+   silent! call system( l:command   )
 endfunction
 
 command! NewNote call NewNoteWithPath()
 command! DeleteNote call DeleteNote()
 command! -nargs=1 AddImage call AddImage( <f-args> )
-command! -nargs=1 AddFile call AddFile( <f-args> )
+command!  AddFile call AddFile(  )
