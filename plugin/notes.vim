@@ -157,11 +157,12 @@ endfunction
 
 function! MarkDownToHtml()
    let l:Output = NoteRoot()
+   let l:ImgDir = NoteRoot() . "/images/plantUML"
    let l:Output = l:Output . "/" . expand("%:p:t:r") . ".html"
-   let l:Stylesheet = g:HtmlDir . "/vimNotesStyleSheet.css"
-   "execute "!python ~/markdownCSS_py.py \"" . expand("%:p") . "\" \"" . l:Stylesheet . "\""  . " \"".  l:Output . "\""
    let l:command = "pandoc -f markdown -t html  --standalone \"" . expand("%:p") . "\" -o \"" . l:Output . "\""
    silent! call system( l:command   )
+   let l:umlcmd = "mkdir -p " . l:ImgDir . "; plantuml -o " . l:ImgDir . " " . expand("%")
+   silent call system( l:umlcmd   )
 endfunction
 
 command! NewNote call NewNoteWithPath()
