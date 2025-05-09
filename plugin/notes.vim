@@ -161,7 +161,7 @@ function! MarkDownToHtml()
    let l:Output = l:Output . "/" . expand("%:p:t:r") . ".html"
    let l:command = "pandoc -f markdown -t html  --standalone \"" . expand("%:p") . "\" -o \"" . l:Output . "\""
    silent! call system( l:command   )
-   let l:umlcmd = "mkdir -p " . l:ImgDir . "; plantuml -o " . l:ImgDir . " " . expand("%")
+   let l:umlcmd = "mkdir -p " . fnameescape(l:ImgDir) . "; plantuml -o " . fnameescape(l:ImgDir) . " " . fnameescape(expand("%"))
    silent call system( l:umlcmd   )
 endfunction
 
